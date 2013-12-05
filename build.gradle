@@ -1,0 +1,43 @@
+apply plugin: 'android'
+
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'com.android.tools.build:gradle:+'
+	}
+}
+
+repositories {
+	def server = 'nexus-server'
+	def URL = "http://${server}:8081/nexus/content"
+	maven {
+		url "${URL}/groups/public"
+	}
+	maven {
+		url "${URL}/repositories/android/"
+	}
+	maven {
+		url "${URL}/repositories/android-snapshots/"
+	}
+	maven {
+		url "${URL}/repositories/snapshots/"
+	}
+}
+
+dependencies {
+	compile 'com.android.support:support-v4:19.0.0'
+	compile 'org.roboguice:roboguice:2.+'
+}
+
+android {
+	compileSdkVersion 19
+	buildToolsVersion '17'
+}
+
+if (hasProperty("xlint")) {
+	tasks.withType(Compile) {
+		options.compilerArgs << "-Xlint"
+	}
+}
